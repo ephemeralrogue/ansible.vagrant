@@ -1,0 +1,21 @@
+# install and configure ufw, nginx, /var/www
+- name: setup ufw, nginx
+  hosts: all
+  become: true
+
+  tasks:
+
+    - name: install ufw
+      ansible.builtin.apt:
+        pkg:
+          - ufw
+
+    - name: install and configure nginx
+      ansible.builtin.import_tasks:
+        file: ./tasks/nginx
+
+  # Update firewall rules
+    - name: ufw - allow ssh connections
+      community.general.ufw:
+        rule: allow
+        name: "Nginx Full"

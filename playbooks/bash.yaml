@@ -1,0 +1,14 @@
+# custom bash setup
+# install Oh My Bash and ble.sh
+- name: bash tooling
+  hosts: all
+
+  tasks:
+
+    - name: run ohmybash tasks
+      ansible.builtin.import_tasks:
+        file: ./tasks/ohmybash.yaml
+
+    - name: run ble.sh tasks
+      ansible.builtin.import_tasks:
+        file: ./tasks/blesh.yaml

@@ -1,0 +1,43 @@
+# install and configure nginx, /var/www
+- name: install nginx and certBot
+  hosts: all
+  become: true
+
+  tasks:
+
+  # install nginx and certBot
+    - name: install nginx
+      ansible.builtin.apt:
+        pkg:
+          - nginx
+          - certbot
+          - ufw
+
+  # create nginx user and group
+    - name: create nginx group
+      ansible.builtin.group:
+        name: nginx
+
+    - name: create nginx user
+      ansible.builtin.user:
+        name: nginx
+        groups: nginx
+        create_home: false
+        shell: /bin/false
+
+    - name: remove /var/www
+      ansible.builtin.file:
+        path: /var/www
+        state: absent
+
+    - name: create /vagrant symbolic link over /var/www
+      ansible.builtin.file:
+        src: /vagrant
+        dest: /var/www
+        state: link
+
+    # Update firewall rules
+    - name: UFW - Allow SSH connections
+      community.general.ufw:
+        rule: allow
+        name: "Nginx Full"

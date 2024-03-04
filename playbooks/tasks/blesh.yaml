@@ -1,0 +1,26 @@
+---
+# install supporting tooling
+- name: blesh | install make, gawk
+  ansible.builtin.apt:
+    pkg:
+      - make
+      - gawk
+  become: true
+
+# ble.sh
+- name: blesh | clone ble.sh # noqa: latest
+  ansible.builtin.git:
+    repo: https://github.com/akinomyoga/ble.sh.git
+    dest: /home/vagrant/ble.sh
+    recursive: true
+    depth: 1
+    track_submodules: true
+
+- name: blesh | install ble.sh
+  ansible.builtin.command: make -C ble.sh install PREFIX=~/.local
+  changed_when: true
+
+# add ble.sh to .bashrc
+- name: blesh | update bash config
+  ansible.builtin.shell: echo '. ~/.local/share/blesh/ble.sh' >> ~/.bashrc
+  changed_when: true

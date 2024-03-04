@@ -1,0 +1,30 @@
+---
+# install nginx and certBot
+- name: nginx | install nginx
+  ansible.builtin.apt:
+    pkg:
+      - nginx
+      - certbot
+
+# create nginx user and group
+- name: nginx | create nginx group
+  ansible.builtin.group:
+    name: nginx
+
+- name: nginx | create nginx user
+  ansible.builtin.user:
+    name: nginx
+    groups: nginx
+    create_home: false
+    shell: /bin/false
+
+- name: nginx | remove /var/www
+  ansible.builtin.file:
+    path: /var/www
+    state: absent
+
+- name: nginx | create /vagrant symbolic link over /var/www
+  ansible.builtin.file:
+    src: /vagrant
+    dest: /var/www
+    state: link

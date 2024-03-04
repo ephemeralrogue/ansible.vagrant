@@ -1,0 +1,29 @@
+---
+# install supporting tooling
+- name: ohmybash | install powerline fonts
+  ansible.builtin.apt:
+    pkg:
+      - fonts-powerline
+  become: true
+
+- name: ohmybash | download ohmybash
+  ansible.builtin.uri:
+    url: https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh
+    method: GET
+    follow_redirects: safe
+    dest: /home/vagrant/ohmybash-install.sh
+    mode: '0744'
+  register: result
+
+- name: ohmybash | install ohmybash
+  ansible.builtin.command:
+    cmd: /home/vagrant/ohmybash-install.sh --unattended
+    creates: /home/vagrant/.oh-my-bash
+
+# set ohmybash theme
+- name: ohmybash | set bash theme
+  ansible.builtin.lineinfile:
+    path: ~/.bashrc
+    state: present
+    regexp: '^OSH_THEME'
+    line: 'OSH_THEME="agnoster"'
