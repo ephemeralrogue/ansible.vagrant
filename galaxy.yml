@@ -39,7 +39,10 @@ tags: []
 # collection label 'namespace.name'. The value is a version range
 # L(specifiers,https://python-semanticversion.readthedocs.io/en/latest/#requirement-specification). Multiple version
 # range specifiers can be set and are separated by ','
-dependencies: { nginxinc.nginx_core: ">=0.8.0" }
+dependencies: {
+  nginxinc.nginx_core: ">=0.8.0",
+  nginxinc.nginx_config: ">=0.7.1"
+}
 
 # The URL of the originating SCM repository
 repository: https://github.com/ephemeralrogue/ansible.vagrant

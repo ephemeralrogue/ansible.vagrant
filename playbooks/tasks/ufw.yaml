@@ -1,0 +1,15 @@
+---
+# install and configure ufw
+- name: ufw | install
+  ansible.builtin.apt:
+    pkg:
+      - ufw
+
+- name: ufw | allow ssh connections
+  community.general.ufw:
+    rule: allow
+    name: OpenSSH
+
+- name: ufw | enable firewall
+  community.general.ufw:
+    state: enabled

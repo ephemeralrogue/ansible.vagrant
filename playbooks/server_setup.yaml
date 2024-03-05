@@ -5,17 +5,33 @@
 
   tasks:
 
-    - name: install ufw
-      ansible.builtin.apt:
-        pkg:
-          - ufw
+    - name: install and configure ufw
+      ansible.builtin.import_tasks:
+        file: ./tasks/ufw.yaml
 
     - name: install and configure nginx
-      ansible.builtin.import_tasks:
-        file: ./tasks/nginx
+      ansible.builtin.include_role:
+        name: nginxinc.nginx_core.nginx
 
-  # Update firewall rules
+    - name: copy replacement nginx default config
+      ansible.builtin.copy:
+        src: ./files/default.conf
+        dest: /etc/nginx/conf.d/default.conf
+        force: true
+        mode: preserve
+
+    - name: remove /var/www
+      ansible.builtin.file:
+        path: /var/www
+        state: absent
+
+    - name: create /vagrant symbolic link over /var/www
+      ansible.builtin.file:
+        src: /vagrant
+        dest: /var/www
+        state: link
+
     - name: ufw - allow ssh connections
       community.general.ufw:
         rule: allow
-        name: "Nginx Full"
+        name: "WWW Full"
